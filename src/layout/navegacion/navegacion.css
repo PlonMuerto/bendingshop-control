@@ -1,0 +1,44 @@
+a{
+    text-decoration: none;
+    color: inherit;
+}
+a:active{
+    color:inherit;
+}
+.flexGrow .logoConteiner{
+    width: 40%;
+}
+.menuControls{
+    user-select: none;
+    background-color:#54addf;
+    width: 280px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom: 0;
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    flex-direction:column;
+    transition: 1000ms all ease;
+    z-index: 5;
+    padding-top: 45px;
+}
+.menuControls.actived{
+    width: 0;
+}
+    .menuControls .toggleButton{
+        color: #eeeeee;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+    .menuControls .linksConteiner{
+        display: flex;
+        justify-content: center;
+        align-items:flex-start;
+        flex-direction: column;
+        width: 96%;
+        overflow: auto;
+        background-color: #fefefe;
+    }
