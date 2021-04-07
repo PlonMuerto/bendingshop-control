@@ -1,10 +1,10 @@
 .productsConteiner{
     width: 100%;
+    height: calc(100vh - 100px);
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background: rgb(110,203,246);
-    background: linear-gradient(72deg, rgba(110,203,246,1) 0%, rgba(157,195,195,1) 28%, rgba(85,108,244,1) 100%);
+    background-color: #222;
     flex-direction: column;
 }
 .productsConteiner .addProducts{
@@ -13,15 +13,8 @@
     align-items: center;
     margin-top:30px;
     width: 70%;
-    background-color: #eeeeee;
-    min-height: 200px;
-
 }
 .productsConteiner .addProducts .add{
  font-size: 150px;
- color:#3f3
-}
-
-.productsConteiner .getProducts{
-
+ color:#3f3;
 }

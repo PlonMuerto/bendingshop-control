@@ -50,7 +50,10 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
+  },
+  header:{
+      height:"100px"
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -74,7 +77,7 @@ function Navegacion(props) {
         <React.Fragment>
             <div className={classes.root}>
             <ThemeProvider theme={theme}>
-                <AppBar position="static">
+                <AppBar position="static" style={{height:'100px'}}>
                     <Toolbar>
                     <IconButton onClick={toggleMenu} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <MenuIcon />
