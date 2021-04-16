@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
+
+//consumer
+import {withProduct} from '../../../context/product/withProduct';
+
 //services
-import NewProduct from '../../../services/products/newProduct';
+import GetProduct from '../../../services/products/getProduct';
+import EditProduct from '../../../services/products/editProduct';
+
 
 //components
 import AddTags from '../../../components/forms/addTag';
@@ -71,8 +77,9 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-function AddProduct(props) {
-  const [open, setOpen] = React.useState(false);
+function EditorProduct(props) {
+  
+  
   const [product, setProduct] = React.useState({
     name:undefined,
     stock:undefined,
@@ -84,14 +91,26 @@ function AddProduct(props) {
     price:0
   });
 
-  const history = useHistory();
+  useEffect(
+    ()=>{
+      chargeProduct();
+      console.log(product)
+    },
+    [props.productData.product]
+  )
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClick=function(value){
+    props.controlProduct.toggle(value);
+
+  }
+ 
+  const chargeProduct = () => {
+    setProduct(async state=>{
+        let producto = await props.productData.product;
+        console.log(producto);
+        return producto;
+    });
+  }
 
   //funciones estraer data components
   const setData = (event)=>{
@@ -109,14 +128,14 @@ function AddProduct(props) {
 
   const setImages = (images)=>{
     setProduct(state=>{
-      console.log(images);
+     
       return{
         ...state,
         images
       }
     })
   };
-
+  
   //funcion enviar producto
   const createProduct = async()=>{
       let images = product.images;
@@ -132,32 +151,23 @@ function AddProduct(props) {
       for (let i = 0; i < images.length; i++){
         productForm.append('files[' + i + ']', images[i]);
       }
-      handleClose();
-      history.push('/home');
-      
-      let tan = await NewProduct(productForm);
+      handleClick(false);
+       
+      alert(JSON.stringify(product));
       
       
   }
 
   return (
     <div>
-        <div className="addProducts">
-
-            
-                <IconButton  onClick={handleClickOpen}>
-                    <AddBoxIcon className="add" />
-                </IconButton>
-            
-        </div>
         
-        <Dialog onClose={handleClose} fullScreen  aria-labelledby="customized-dialog-title" open={open}>
+        <Dialog onClose={()=>{handleClick(false)}} fullScreen  aria-labelledby="customized-dialog-title" open={props.productData.change}>
             
         <DialogContent  >
           
 
-            <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                Creando producto
+            <DialogTitle id="customized-dialog-title" onClose={()=>{handleClick(false)}}>
+                Editando producto
             </DialogTitle>
             <Grid container spacing={3}>
                 <Grid item xs={6}>
@@ -167,7 +177,7 @@ function AddProduct(props) {
                         name="name"
                         onChange={setData}
                         placeholder="Nombre del producto." 
-                        value={product.name}
+                        value={product.name || props.productData.product.name}
                         helperText={(!product.name || product.name === '') ? "ingrese el nombre del producto" : null}
                         error={((!product.name || product.name === '')) ? true : null}
                         style={{width:'100%'}}
@@ -179,7 +189,7 @@ function AddProduct(props) {
                         name="stock"
                         label="Cantidad"
                         onChange={setData}
-                        value={product.stock}
+                        value={product.stock || props.productData.product.stock}
                         placeholder="cantidad de unidades del producto"
                         helperText={(isNaN(product.stock)) ? "Incorrecta Cantidad." : null}
                         error={(isNaN(product.stock) || product.stock <= 0) ? true : null}
@@ -192,7 +202,7 @@ function AddProduct(props) {
                         name="price"
                         label="Precio"
                         onChange={setData}
-                        value={product.price}
+                        value={product.price || props.productData.product.price}
                         placeholder="precio producto"
                         helperText={(isNaN(product.price)) ? "Incorrecta Cantidad." : null}
                         error={(isNaN(product.price) || product.price <= 0) ? true : null}
@@ -206,7 +216,7 @@ function AddProduct(props) {
                     onChange={setData}
                     name="description"
                     multiline
-                    value={product.description}
+                    value={product.description || props.productData.product.description}
                     rows={8}
                     helperText={(!product.description || product.description === '') ? "ingrese descripcion del producto" : null}
                     error={((!product.description || product.description === '')) ? true : null}
@@ -221,7 +231,7 @@ function AddProduct(props) {
                         onChange={setData}
                         select
                         label="Seccion"
-                        value={product.section}
+                        value={product.section || props.productData.product.section}
                         helperText={(!product.section || product.section === '') ? "ingrese seccion del producto." : null}
                         error={(!product.section || product.section === '') ? true : false}
                         style={{width:'100%'}}
@@ -240,7 +250,7 @@ function AddProduct(props) {
                         select
                         onChange={setData}
                         label="promocion activa"
-                        value={product.marcs}
+                        value={product.marcs || props.productData.product.marcs}
                         helperText={(!product.marcs || product.marcs === '') ? "ingrese seccion del producto." : null}
                         error={(!product.marcs || product.marcs === '') ? true : false}
                         style={{width:'100%'}}
@@ -265,7 +275,7 @@ function AddProduct(props) {
           
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={createProduct} disabled={(!product.description || product.images === 0 || !product.marcs || !product.name || !product.section || !product.stock || product.tags === 0) ? true : false}  color="primary" >
+          <Button autoFocus onClick={createProduct} disabled={(!product.description || product.images == 0 || !product.marcs || !product.name || !product.section || !product.stock || product.tags == 0) ? true : false}  color="primary" >
             Crear Producto
           </Button>
           
@@ -275,4 +285,4 @@ function AddProduct(props) {
   );
 }
 
-export default AddProduct;
+export default withProduct(EditorProduct);
